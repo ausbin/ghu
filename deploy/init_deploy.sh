@@ -42,7 +42,7 @@ cp -iv "$repo_path/deploy/config.deploy-example.ini" "$deploy_root/config.ini"
 cp -iv "$repo_path/deploy/"{deploy.sh,deploy.config} "$deploy_root"
 # TODO: Escape the path better here, both for sed and for the bash double
 #       quotes "" in deploy.config
-sed -ie "s/ABSOLUTE_PATH_TO_DEPLOY_ROOT/${GHU_DEPLOY_CONFIG_PATH//\//\\\/}/" \
+sed -i -e "s/ABSOLUTE_PATH_TO_DEPLOY_ROOT/${deploy_root//\//\\\/}/" \
         "$deploy_root/deploy.config"
 
 # Generate a Django SECRET_KEY
@@ -50,10 +50,12 @@ sed -ie "s/ABSOLUTE_PATH_TO_DEPLOY_ROOT/${GHU_DEPLOY_CONFIG_PATH//\//\\\/}/" \
 
 printf 'Done!\n\n'`
       `'Now you can delete this repository, tweak application configuration '`
-      `'in `%s'\'', and run your first deployment! Note you will need to run '`
-      `'it as the deployment user (e.g., jenkins) like:\n'`
-      `'\tsudo -u jenkins GHU_DEPLOY_CONFIG_PATH="%s" "%s"\n' \
+      `'in `%s'\'' and deployment configuration in `%s'\'', and run your '`
+      `'first deployment! Note you will need to run it as the deployment '`
+      `'user (e.g., jenkins) like:\n'`
+      `'\tsudo -u jenkins GHU_DEPLOY_CONFIG_PATH="%s" "%s"\n'`
+      `'Also, do not forget to create $server_user from deploy.config.\n' \
       "$deploy_root/config.ini" "$deploy_root/deploy.config" \
-      "$deploy_root/deploy.sh"
+      "$deploy_root/deploy.config" "$deploy_root/deploy.sh"
 
 exit 0
